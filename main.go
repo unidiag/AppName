@@ -12,7 +12,7 @@ import (
 
 const APPNAME = "AppName"
 const APPLINK = "http://github.com/unidiag/AppName"
-const VERSION = "1.04"
+const VERSION = "1.00"
 const BUILD_DATE = "2026-03-20"
 const BUILD_TIME = "15:13:18"
 
