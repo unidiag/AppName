@@ -11,9 +11,10 @@ import (
 )
 
 const APPNAME = "AppName"
-const VERSION = "1.03"
-const BUILD_DATE = "2026-03-16"
-const BUILD_TIME = "03:22:55"
+const APPLINK = "http://github.com/unidiag/AppName"
+const VERSION = "1.04"
+const BUILD_DATE = "2026-03-20"
+const BUILD_TIME = "15:13:18"
 
 // pgDSN="host=localhost user=epg password=epg dbname=epg port=5432 sslmode=disable TimeZone=Europe/Minsk"
 // myDSN="dvbscan:dvbscan@tcp(127.0.0.1:3306)/dvbscan?charset=utf8mb4&parseTime=True&loc=Local"

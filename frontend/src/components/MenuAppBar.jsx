@@ -8,7 +8,8 @@ import {
   Container,
   Button,
   MenuItem,
-  alpha
+  alpha,
+  useTheme
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
@@ -16,9 +17,11 @@ import AccountMenu from './AccountMenu';
 import ThemeToggleButton from './ThemeToggleButton';
 import { t } from 'i18next';
 import LanguageChip from './LanguageChip';
+import { ReactComponent as Logo } from "assets/logo.svg";
 
 export default function MenuAppBar({ pages, settings }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const theme = useTheme()
 
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleCloseNavMenu = () => setAnchorElNav(null);
@@ -58,11 +61,12 @@ export default function MenuAppBar({ pages, settings }) {
               })
             }}
           >
-            <Box
-              component="img"
-              src="/logo.svg"
-              alt="logo"
-              sx={{ height: 26, width: 26 }}
+            <Logo
+              style={{
+                height: 26,
+                width: 26,
+                color: theme.palette.text.primary
+              }}
             />
 
             <Box
@@ -165,11 +169,12 @@ export default function MenuAppBar({ pages, settings }) {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box
-                  component="img"
-                  src="/logo.svg"
-                  alt="logo"
-                  sx={{ height: 24, width: 24 }}
+                <Logo
+                  style={{
+                    height: 26,
+                    width: 26,
+                    color: theme.palette.text.primary
+                  }}
                 />
                 <Box sx={{ fontWeight: 700, fontSize: 16 }}>
                   {process.env.REACT_APP_NAME}

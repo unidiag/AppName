@@ -71,7 +71,7 @@ export default function UsersBlock({readonly}){
     
       const getStatusColor = (status) => {
         switch (Number(status)) {
-          case 1:
+          case 9:
             return "error";
           case 2:
             return "success";

@@ -1,6 +1,10 @@
 package main
 
-import "main/models"
+import (
+	"main/models"
+
+	"github.com/spf13/cast"
+)
 
 func loadSettings() {
 	settings = make(map[string]string)
@@ -11,7 +15,7 @@ func loadSettings() {
 	}
 }
 
-func setSetting(key, value string, desc ...string) {
+func setSetting(key, value string, another ...string) {
 	if settings == nil {
 		settings = make(map[string]string)
 	}
@@ -20,8 +24,11 @@ func setSetting(key, value string, desc ...string) {
 		Key:   key,
 		Value: value,
 	}
-	if len(desc) > 0 {
-		row.Description = desc[0]
+	if len(another) > 0 {
+		row.Description = another[0]
+		if len(another) == 2 {
+			row.Position = cast.ToUint(another[1])
+		}
 	}
 	db.Save(&row)
 }

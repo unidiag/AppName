@@ -12,7 +12,7 @@ func apiGetSettings(ctx *ApiCtx) map[string]any {
 
 	var rows []models.Setting
 	if err := db.
-		Order("key ASC").
+		Order("position ASC").
 		Find(&rows).Error; err != nil {
 		out["status"] = err.Error()
 		return out

@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -115,7 +116,7 @@ export default function SettingsBlock({readonly}) {
                 >
                   <TableCell>
                     <Typography sx={{ fontWeight: 600 }}>
-                      {row.key}
+                      <Tooltip title={row.description}>{row.key}</Tooltip>
                     </Typography>
                   </TableCell>
 

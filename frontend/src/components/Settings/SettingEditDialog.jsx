@@ -76,6 +76,7 @@ export default function SettingEditDialog({ open, row, onClose, onSaved }) {
             value={form.key}
             onChange={(e) => handleChange("key", e.target.value)}
             fullWidth
+            disabled={true}
           />
 
           <TextField

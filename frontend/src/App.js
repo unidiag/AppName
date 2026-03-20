@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 import MenuAppBar from "components/MenuAppBar";
 import { AuthProvider } from "utils/useAuth";
 import { useTranslation } from "react-i18next";
+import MyLink from "components/MyLink";
 
 
 function AppRoutes() {
@@ -52,10 +53,18 @@ function App() {
               fontSize:"0.75rem"
             }}
           >
-              © {new Date().getFullYear()} {t("footer.rights", { 
-                site: process.env.REACT_APP_NAME,
-                version: process.env.REACT_APP_VERSION
-              })}
+              © {new Date().getFullYear()}
+              {" "}
+              {t("footer.rights")}
+              {" "}
+              <MyLink
+                href={process.env.REACT_APP_LINK}
+                title={process.env.REACT_APP_NAME+" v."+process.env.REACT_APP_VERSION}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{process.env.REACT_APP_NAME}</MyLink>
+              {". "}
+              {t("footer.build", {version: process.env.REACT_APP_VERSION})}
           </Box>
 
         </Box>

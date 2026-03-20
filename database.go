@@ -74,9 +74,9 @@ func initDB() bool {
 		createDefaultUser("admin", "admin", 9)
 		//createDefaultUser("user", "user", 2)
 
-		setSetting("port", setupCfg.Listen, "Web server listen address")
-		setSetting("whitelist", "", "ALLOWED addresses and countries (separated by commas)")
-		setSetting("blacklist", "CN, 178.24.52.115", "PROHIBITED addresses and countries (separated by commas)")
+		setSetting("port", setupCfg.Listen, "Web server listen address", "1")
+		setSetting("whitelist", "", "ALLOWED addresses and countries (separated by commas)", "2")
+		setSetting("blacklist", "CN, 178.24.52.115", "PROHIBITED addresses and countries (separated by commas)", "3")
 
 		if setupCfg.InstallSvc {
 			// вычисляем полный путь

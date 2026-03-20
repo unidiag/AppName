@@ -8,12 +8,12 @@ import { useAuth } from "utils/useAuth";
 export default function SettingsPage() {
 
   const {user} = useAuth()
-  const status = user?.status !== 1
+  const readonly = user?.status !== 9
 
   return (
     <AuthGuard>
-      <SettingsBlock readonly={status} />
-      <UsersBlock readonly={status}  />
+      {!readonly && <SettingsBlock />}
+      <UsersBlock readonly={readonly}  />
     </AuthGuard>
   );
 }

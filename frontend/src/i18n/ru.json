@@ -7,7 +7,10 @@
 
   "menu": { "servers": "Сервера", "stats": "Статистика", "export": "Экспорт" },
   "settings": { "profile": "Профиль", "apps": "Мои приложения", "exit": "Выход" },
-  "footer": { "rights": "Все права защищены {{site}}. Версия {{version}}" },
+  "footer": {
+    "rights": "Все права сохранены",
+    "build":  "Сборка {{version}}"
+  },
 
   "go_home" : "Вернуться домой",
   "unknown_route" : "Неизвестный маршрут",

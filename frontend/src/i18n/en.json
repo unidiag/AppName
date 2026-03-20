@@ -7,8 +7,10 @@
 
   "menu": { "servers": "Servers", "stats": "Statistics", "export": "Export" },
   "settings": { "main":"Settings", "profile": "Profile", "apps": "My applications", "exit": "Sign out" },
-  "footer": { "rights": "All rights reserved {{site}}. Build {{version}}" },
-
+  "footer": {
+    "rights": "All rights reserved",
+    "build":  "Build {{version}}"
+  },
   "go_home" : "Go Home",
   "unknown_route" : "Unknown route",
   "underconst": "Under constuction..",

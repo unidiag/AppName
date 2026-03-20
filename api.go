@@ -34,6 +34,12 @@ var apiRoutes = map[string]APIFn{
 	"getUsers":   apiGetUsers,
 	"saveUser":   apiSaveUser,
 	"deleteUser": apiDeleteUser,
+	// settings
+	"getSettings":    apiGetSettings,
+	"saveSetting":    apiSaveSetting,
+	"restartProgram": apiRestartProgram,
+	// main
+	"getTime": apiGetTime,
 }
 
 func api(data map[string]any, r *http.Request, w http.ResponseWriter) map[string]any {

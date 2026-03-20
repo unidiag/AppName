@@ -101,8 +101,9 @@ export default function UserEditDialog({ open, row, onClose, onSaved }) {
             fullWidth
           >
             <MenuItem value={0}>0 - Disable</MenuItem>
-            <MenuItem value={1}>1 - Administrator</MenuItem>
-            <MenuItem value={2}>2 - Observer</MenuItem>
+            <MenuItem value={1}>1 - User</MenuItem>
+            <MenuItem value={2}>2 - Superuser</MenuItem>
+            <MenuItem value={9}>9 - Administrator</MenuItem>
           </TextField>
         </Box>
       </DialogContent>

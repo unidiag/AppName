@@ -6,7 +6,10 @@
 
   "menu": { "servers": "Серверы", "stats": "Статыстыка", "export": "Экспарт" },
   "settings": { "main":"Настройцы", "profile": "Профіль", "apps":"Маi аплiкацыi", "exit": "Выхад" },
-  "footer": { "rights": "Усе правы абаронены {{site}}. Бiльд {{version}}" },
+  "footer": {
+    "rights": "Усе правы абаронены",
+    "build":  "Бiльд {{version}}"
+  },
 
   "go_home" : "Вярнуцца да хаты",
   "unknown_route" : "Невядомы роут",
