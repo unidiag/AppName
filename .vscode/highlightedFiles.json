@@ -1,0 +1,19 @@
+{
+  "/1/AppName/build/logo.svg": {},
+  "/1/AppName/api_users.go": {
+    "color": "pink",
+    "badge": "○"
+  },
+  "/1/AppName/api_settings.go": {
+    "color": "pink",
+    "badge": "○"
+  },
+  "/1/AppName/api.go": {
+    "color": "pink",
+    "badge": "●"
+  },
+  "/1/AppName/api_auth.go": {
+    "color": "pink",
+    "badge": "○"
+  }
+}

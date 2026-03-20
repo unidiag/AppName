@@ -1,0 +1,6 @@
+build/
+frontend/node_modules/
+appname
+*.db
+*.sqlite3
+geoip.mmdb
