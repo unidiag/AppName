@@ -1,52 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AuthGuard from "components/Auth/AuthGuard";
 import { sendDataToServer } from "utils/functions";
-import { Box } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Paper
+} from "@mui/material";
+import MarkdownRenderer from "components/MarkdownRenederer";
 
+export default function MainPage() {
+  const [prompt, setPrompt] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const handleAsk = () => {
+    if (!prompt.trim()) return;
 
-export default function MainPage(){
+    setLoading(true);
+    setAnswer("");
 
-    const [time, setTime] = useState("")
+    sendDataToServer({
+      op: "askAI",
+      prompt
+    }).then((res) => {
+      if (res.status === "OK") {
+        setAnswer(res.answer || "");
+      } else {
+        setAnswer("Error: " + res.status);
+      }
+      setLoading(false);
+    });
+  };
 
+  return (
+    <AuthGuard>
+      <Box
+        sx={{
+          height: "80vh",
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
+          gap: 2
+        }}
+      >
+        {/* Answer */}
+        <Paper
+            sx={{
+                flex: 1,
+                p: 2,
+                overflow: "auto"
+            }}
+        >
+            {loading ? "Thinking..." : <MarkdownRenderer content={answer} />}
+        </Paper>
 
-
-
-    useEffect(() => {
-        const loadTime = () => {
-            sendDataToServer({ op: "getTime" }).then((res) => {
-                if (res.status === "OK") {
-                    setTime(res.time);
-                }
-            });
-        };
-
-        loadTime();
-        const interval = setInterval(loadTime, 1000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-
-
-
-
-    return (
-        <AuthGuard>
-            
-            <Box
-                sx={{
-                    height: "100vh",
-                    display: "flex",
-                    justifyContent: "center", // horizontal center
-                    alignItems: "center",     // vertical center
-                    fontSize: "32px"
-                }}
-            >
-                {time}
-            </Box>
-
-        </AuthGuard>
-    )
-
+        {/* Input */}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            fullWidth
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter your prompt..."
+          />
+          <Button
+            variant="contained"
+            onClick={handleAsk}
+            disabled={loading}
+          >
+            Send
+          </Button>
+        </Box>
+      </Box>
+    </AuthGuard>
+  );
 }

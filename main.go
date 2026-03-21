@@ -7,14 +7,15 @@ import (
 	"time"
 
 	"github.com/oschwald/geoip2-golang"
+	llama "github.com/unidiag/go-llama"
 	"gorm.io/gorm"
 )
 
 const APPNAME = "AppName"
 const APPLINK = "http://github.com/unidiag/AppName"
 const VERSION = "1.00"
-const BUILD_DATE = "2026-03-20"
-const BUILD_TIME = "15:13:18"
+const BUILD_DATE = "2026-03-21"
+const BUILD_TIME = "09:07:43"
 
 // pgDSN="host=localhost user=epg password=epg dbname=epg port=5432 sslmode=disable TimeZone=Europe/Minsk"
 // myDSN="dvbscan:dvbscan@tcp(127.0.0.1:3306)/dvbscan?charset=utf8mb4&parseTime=True&loc=Local"
@@ -33,6 +34,8 @@ var (
 	jwtSecret  = []byte("CHANGE_ME_LONG_RANDOM_SECRET_1234")
 	accessTTL  = 10 * time.Minute
 	refreshTTL = 14 * 24 * time.Hour
+
+	llamaClient *llama.Client
 )
 
 // ███╗   ███╗ █████╗ ██╗███╗   ██╗
@@ -55,8 +58,9 @@ func main() {
 	debug = isRunThroughGoRun()
 	slog("Server run in DEBUG-mode", "debug")
 
-	initDB()    // инициализация базы данных и wizard, если запуск впервые
-	initGeoIP() // использовать базу данных IP. можно закомментировать, тогда не используется ./geoip.mmdb
+	initDB()                                                           // инициализация базы данных и wizard, если запуск впервые
+	initGeoIP()                                                        // использовать базу данных IP. можно закомментировать, тогда не используется ./geoip.mmdb
+	llamaClient = llama.New(getSetting("ailink"), getSetting("aikey")) // если нужен ии
 
 	go webserver()
 

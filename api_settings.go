@@ -36,15 +36,20 @@ func apiSaveSetting(ctx *ApiCtx) map[string]any {
 	}
 
 	if oldKey == "" || oldKey == key {
-		row := models.Setting{
-			Key:   key,
-			Value: value,
-		}
 
-		if err := db.Save(&row).Error; err != nil {
+		if err := db.
+			Model(&models.Setting{}).
+			Where("key = ?", key).
+			Updates(map[string]any{
+				"value": value,
+			}).Error; err != nil {
+
 			out["status"] = err.Error()
 			return out
 		}
+
+		var row models.Setting
+		db.First(&row, "key = ?", key)
 
 		out["row"] = row
 		return out
