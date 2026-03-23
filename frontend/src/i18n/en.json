@@ -5,7 +5,12 @@
   "hello": "Hello, {{name}}!",
   "exit": "Exit",
 
-  "menu": { "servers": "Servers", "stats": "Statistics", "export": "Export" },
+  "menu": { 
+    "test": "Test",
+    "stats": "Statistics",
+    "export": "Export"
+  },
+
   "settings": { "main":"Settings", "profile": "Profile", "apps": "My applications", "exit": "Sign out" },
   "footer": {
     "rights": "All rights reserved",

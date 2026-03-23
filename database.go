@@ -21,6 +21,7 @@ import (
 // initDB opens (or creates) db.sqlite3 in project root via GORM
 func initDB() bool {
 
+	// если база нужна и передана в параметре
 	if len(os.Args) > 1 {
 		dbname = os.Args[1]
 	}
@@ -55,9 +56,7 @@ func initDB() bool {
 	)
 
 	var err error
-	db, err = gorm.Open(sqlite.Open(dbname), &gorm.Config{
-		Logger: gormLogger,
-	})
+	db, err = openDatabase(dbname, gormLogger)
 	if err != nil {
 		slog("DB open error: "+err.Error(), "error")
 		log.Fatal(err)

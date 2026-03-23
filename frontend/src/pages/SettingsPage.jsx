@@ -1,4 +1,4 @@
-import AuthGuard from "components/Auth/AuthGuard";
+import { Container } from "@mui/material";
 import SettingsBlock from "components/Settings/SettingsBlock";
 import UsersBlock from "components/Settings/UsersBlock";
 import { useAuth } from "utils/useAuth";
@@ -11,9 +11,9 @@ export default function SettingsPage() {
   const readonly = user?.status !== 9
 
   return (
-    <AuthGuard>
-      {!readonly && <SettingsBlock />}
-      <UsersBlock readonly={readonly}  />
-    </AuthGuard>
+    <Container maxWidth="xl">
+        {!readonly && <SettingsBlock />}
+        <UsersBlock readonly={readonly}  />
+    </Container>
   );
 }

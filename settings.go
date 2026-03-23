@@ -30,7 +30,10 @@ func setSetting(key, value string, another ...string) {
 			row.Position = cast.ToUint(another[1])
 		}
 	}
-	db.Save(&row)
+
+	if dbname != "" {
+		db.Save(&row)
+	}
 }
 
 func getSetting(key string, def ...string) string {

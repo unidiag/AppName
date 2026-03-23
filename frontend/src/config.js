@@ -13,5 +13,5 @@ export const defaultConfig = {
 };
 
 
-export const urlsMenu = [/*"servers", "satellites"*/];
+export const urlsMenu = ["test"/*, "satellites"*/];
 export const urlsUser = ["profile", "exit"]

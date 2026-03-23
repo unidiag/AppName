@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"log/syslog"
+	"os"
 	"sync"
 	"time"
 
@@ -19,6 +20,7 @@ const BUILD_TIME = "09:07:43"
 
 // pgDSN="host=localhost user=epg password=epg dbname=epg port=5432 sslmode=disable TimeZone=Europe/Minsk"
 // myDSN="dvbscan:dvbscan@tcp(127.0.0.1:3306)/dvbscan?charset=utf8mb4&parseTime=True&loc=Local"
+// var dbname = ""
 var dbname = "db.sqlite3"
 
 var (
@@ -58,7 +60,15 @@ func main() {
 	debug = isRunThroughGoRun()
 	slog("Server run in DEBUG-mode", "debug")
 
-	initDB()                                                           // инициализация базы данных и wizard, если запуск впервые
+	if dbname != "" {
+		initDB() // инициализация базы данных и wizard, если запуск впервые
+	} else {
+		port := ":9000"
+		if len(os.Args) > 1 {
+			port = os.Args[1]
+		}
+		setSetting("port", port)
+	}
 	initGeoIP()                                                        // использовать базу данных IP. можно закомментировать, тогда не используется ./geoip.mmdb
 	llamaClient = llama.New(getSetting("ailink"), getSetting("aikey")) // если нужен ии
 
