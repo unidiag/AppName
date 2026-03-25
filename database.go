@@ -76,8 +76,6 @@ func initDB() bool {
 		setSetting("port", setupCfg.Listen, "Web server listen address", "1")
 		setSetting("whitelist", "", "ALLOWED addresses and countries (separated by commas)", "2")
 		setSetting("blacklist", "CN, 178.24.52.115", "PROHIBITED addresses and countries (separated by commas)", "3")
-		setSetting("ailink", "http://127.0.0.1:5500", "Link for llama-server", "4")
-		setSetting("aikey", "", "API-KEY for request llama-server", "5")
 
 		if setupCfg.InstallSvc {
 			// вычисляем полный путь

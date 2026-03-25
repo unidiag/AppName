@@ -69,8 +69,7 @@ func main() {
 		}
 		setSetting("port", port)
 	}
-	initGeoIP()                                                        // использовать базу данных IP. можно закомментировать, тогда не используется ./geoip.mmdb
-	llamaClient = llama.New(getSetting("ailink"), getSetting("aikey")) // если нужен ии
+	initGeoIP() // использовать базу данных IP. можно закомментировать, тогда не используется ./geoip.mmdb
 
 	go webserver()
 

@@ -1,4 +1,4 @@
-import { Alert, Box, Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import IconButton from 'components/@extended/IconButton';
 import TitleBlock from "components/TitleBlock";
 import React, { useState } from "react";
@@ -22,10 +22,7 @@ export default function TestPage(){
                 <IconButton size={"small"} shape="rounded" variant="contained" onClick={() => setCount(count-1)}><MinusOutlined /></IconButton>
                 <IconButton size={"small"} shape="rounded" variant="contained" onClick={() => setCount(count+1)}><PlusOutlined /></IconButton>
             </Box>
-
-            <Box>
-                <Alert>Hello wortld</Alert>
-            </Box>
+            
 
 
         </Container>

@@ -40,8 +40,6 @@ var apiRoutes = map[string]APIFn{
 	"restartProgram": apiRestartProgram,
 	// main
 	"getTime": apiGetTime,
-	// ai
-	"askAI": apiAskAI,
 }
 
 func api(data map[string]any, r *http.Request, w http.ResponseWriter) map[string]any {
