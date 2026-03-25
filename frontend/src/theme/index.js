@@ -16,12 +16,13 @@ import { alpha } from '@mui/material/styles';
 
 // ==============================|| DEFAULT THEME - MAIN ||============================== //
 
-export default function ThemeCustomization({ children }) {
+export default function ThemeCustomization({ children, mode: modeProp }) {
   const { themeDirection, mode, presetColor, fontFamily } = useConfig();
 
-  const theme = useMemo(() => Palette(mode, presetColor), [mode, presetColor]);
+  const finalMode = modeProp || mode;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const theme = useMemo(() => Palette(finalMode, presetColor), [finalMode, presetColor]);
+
   const themeTypography = useMemo(() => Typography(fontFamily), [fontFamily]);
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
@@ -51,8 +52,12 @@ export default function ThemeCustomization({ children }) {
     [themeDirection, theme, themeTypography, themeCustomShadows]
   );
 
-  const themes = createTheme(themeOptions);
-  themes.components = componentsOverride(themes);
+
+  
+  const baseTheme = createTheme(themeOptions);
+  const themes = createTheme(baseTheme, {
+    components: componentsOverride(baseTheme)
+  });
 
 
 

@@ -9,7 +9,7 @@ export const ThemeModeContext = createContext({
 
 const STORAGE_KEY = 'ui:mode';
 
-export default function ThemeModeProvider({ children, defaultMode = ThemeMode.LIGHT }) {
+export default function ThemeModeProvider({ children, defaultMode = ThemeMode.DARK }) {
   const [mode, setMode] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);

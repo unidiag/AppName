@@ -34,7 +34,7 @@ export default function OutlinedInput(theme) {
           padding: '10.5px 14px 10.5px 12px'
         },
         notchedOutline: {
-          borderColor: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[200] : theme.palette.grey[300]
+          borderColor: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[300] : theme.palette.grey[400]
         },
         root: {
           ...getColor({ variant: 'primary', theme }),
