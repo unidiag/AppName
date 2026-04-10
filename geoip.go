@@ -12,7 +12,7 @@ import (
 func initGeoIP() {
 	// geoip database
 	if !fileExists("./geoip.mmdb") {
-		file, _ := staticFiles.ReadFile("build/geoip.mmdb")
+		file, _ := staticFiles.ReadFile("build/geoip.db")
 		os.WriteFile("./geoip.mmdb", file, 0644)
 	}
 	// читаем базу данных ip чтобы лежала всегда в озу
