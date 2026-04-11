@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"main/models"
@@ -26,12 +27,10 @@ func initDB() bool {
 		dbname = os.Args[1]
 	}
 
-	firstRun := false
 	var setupCfg *SetupConfig
+	firstRun := detectFirstRun(dbname)
 
-	if _, err := os.Stat(dbname); os.IsNotExist(err) {
-		firstRun = true
-
+	if firstRun {
 		var ok bool
 		setupCfg, ok = runSetupWizard()
 		if !ok {
@@ -70,8 +69,9 @@ func initDB() bool {
 	// save setup settings
 	if firstRun && setupCfg != nil {
 
-		createDefaultUser("admin", "admin", 9)
-		//createDefaultUser("user", "user", 2)
+		createDefaultUser("root", "root", 9)
+		createDefaultUser("admin", "admin", 2)
+		createDefaultUser("user", "user", 1)
 
 		setSetting("port", setupCfg.Listen, "Web server listen address", "1")
 		setSetting("whitelist", "", "ALLOWED addresses and countries (separated by commas)", "2")
@@ -101,27 +101,67 @@ func initDB() bool {
 
 func openDatabase(dsn string, gormLogger logger.Interface) (*gorm.DB, error) {
 	dsn = strings.TrimSpace(dsn)
+	switch typeDatabase(dsn) {
+	// --- SQLite ---
+	case "sqlite":
+		log.Println("Using SQLite3: ", dsn)
+		return gorm.Open(sqlite.Open(dsn), &gorm.Config{
+			Logger: gormLogger,
+		})
+
+	// --- PostgreSQL ---
+	case "postgresql":
+		log.Println("Using PostgreSQL")
+		return gorm.Open(postgres.Open(dsn), &gorm.Config{
+			Logger: gormLogger,
+		})
+	// --- MariaDB / MySQL ---
+	case "mysql":
+		log.Println("Using MySQL/MariaDB")
+		return gorm.Open(mysql.Open(dsn), &gorm.Config{
+			Logger: gormLogger,
+		})
+	}
+	return nil, errors.New("Unknown detect type database")
+}
+
+func typeDatabase(dsn string) string {
+	dsn = strings.TrimSpace(dsn)
 	// --- SQLite ---
 	if !strings.Contains(dsn, " ") &&
 		(strings.HasSuffix(dsn, ".db") ||
 			strings.HasSuffix(dsn, ".sqlite") ||
 			strings.HasSuffix(dsn, ".sqlite3") ||
 			!strings.Contains(dsn, "@")) {
-		log.Println("Using SQLite: ", dsn)
-		return gorm.Open(sqlite.Open(dsn), &gorm.Config{
-			Logger: gormLogger,
-		})
+		return "sqlite"
 	}
 	// --- PostgreSQL ---
 	if strings.Contains(dsn, " ") {
-		log.Println("Using PostgreSQL")
-		return gorm.Open(postgres.Open(dsn), &gorm.Config{
-			Logger: gormLogger,
-		})
+		return "postgersql"
 	}
 	// --- MariaDB / MySQL ---
-	log.Println("Using MySQL/MariaDB")
-	return gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: gormLogger,
-	})
+	if strings.Contains(dsn, "@") && strings.Contains(dsn, ":") {
+		return "mysql"
+	}
+
+	return "unknown"
+}
+
+func detectFirstRun(dsn string) bool {
+	switch typeDatabase(dsn) {
+	case "mysql":
+		if _, err = gorm.Open(mysql.Open(dsn)); err != nil {
+			return true
+		}
+	case "postgresql":
+		if _, err = gorm.Open(postgres.Open(dsn)); err != nil {
+			return true
+		}
+	case "sqlite":
+		if _, err := os.Stat(dbname); os.IsNotExist(err) {
+			return true
+		}
+	}
+
+	return false
 }

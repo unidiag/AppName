@@ -18,7 +18,7 @@ func initGeoIP() {
 	// читаем базу данных ip чтобы лежала всегда в озу
 	dbip, err = geoip2.Open("./geoip.mmdb")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("GeoIP open error: " + err.Error())
 	}
 	// defer dbip.Close()
 }
