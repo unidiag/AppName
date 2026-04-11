@@ -6,6 +6,7 @@ import (
 	"log"
 	"main/models"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -16,6 +17,14 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+type DBConfig struct {
+	User     string
+	Password string
+	DBName   string
+	Host     string
+	Port     string
+}
 
 // -------------------- DB INIT --------------------
 
@@ -148,15 +157,26 @@ func typeDatabase(dsn string) string {
 }
 
 func detectFirstRun(dsn string) bool {
+	var err error
+
 	switch typeDatabase(dsn) {
+
 	case "mysql":
-		if _, err = gorm.Open(mysql.Open(dsn)); err != nil {
+		_, err = gorm.Open(mysql.Open(dsn))
+		if err != nil {
+			cfg := parseMySQL(dsn)
+			createMySQLDB(cfg)
 			return true
 		}
+
 	case "postgresql":
-		if _, err = gorm.Open(postgres.Open(dsn)); err != nil {
+		_, err = gorm.Open(postgres.Open(dsn))
+		if err != nil {
+			cfg := parsePostgres(dsn)
+			createPostgresDB(cfg)
 			return true
 		}
+
 	case "sqlite":
 		if _, err := os.Stat(dbname); os.IsNotExist(err) {
 			return true
@@ -164,4 +184,92 @@ func detectFirstRun(dsn string) bool {
 	}
 
 	return false
+}
+
+func createPostgresDB(cfg DBConfig) error {
+	cmds := []string{
+		"CREATE DATABASE " + cfg.DBName + ";",
+		"DO $$ BEGIN IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '" + cfg.User + "') THEN CREATE USER " + cfg.User + " WITH PASSWORD '" + cfg.Password + "'; END IF; END $$;",
+		"GRANT ALL PRIVILEGES ON DATABASE " + cfg.DBName + " TO " + cfg.User + ";",
+	}
+
+	for _, sql := range cmds {
+		cmd := exec.Command("sudo", "-u", "postgres", "psql", "-c", sql)
+		if err := cmd.Run(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func createMySQLDB(cfg DBConfig) error {
+	sql := `
+CREATE DATABASE IF NOT EXISTS ` + cfg.DBName + ` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '` + cfg.User + `'@'localhost' IDENTIFIED BY '` + cfg.Password + `';
+GRANT ALL PRIVILEGES ON ` + cfg.DBName + `.* TO '` + cfg.User + `'@'localhost';
+FLUSH PRIVILEGES;
+`
+
+	cmd := exec.Command("sudo", "mysql", "-e", sql)
+	return cmd.Run()
+}
+
+// MySQL: user:pass@tcp(host:port)/dbname?...
+func parseMySQL(dsn string) DBConfig {
+	cfg := DBConfig{}
+
+	parts := strings.Split(dsn, "@tcp(")
+	if len(parts) != 2 {
+		return cfg
+	}
+
+	// user:pass
+	up := strings.Split(parts[0], ":")
+	cfg.User = up[0]
+	if len(up) > 1 {
+		cfg.Password = up[1]
+	}
+
+	// host:port)/dbname
+	rest := parts[1]
+	i := strings.Index(rest, ")")
+	hostport := rest[:i]
+	dbpart := rest[i+2:] // skip ")/"
+
+	hp := strings.Split(hostport, ":")
+	cfg.Host = hp[0]
+	cfg.Port = hp[1]
+
+	db := strings.Split(dbpart, "?")[0]
+	cfg.DBName = db
+
+	return cfg
+}
+
+// PostgreSQL: key=value
+func parsePostgres(dsn string) DBConfig {
+	cfg := DBConfig{}
+
+	parts := strings.Fields(dsn)
+	for _, p := range parts {
+		kv := strings.SplitN(p, "=", 2)
+		if len(kv) != 2 {
+			continue
+		}
+
+		switch kv[0] {
+		case "user":
+			cfg.User = kv[1]
+		case "password":
+			cfg.Password = kv[1]
+		case "dbname":
+			cfg.DBName = kv[1]
+		case "host":
+			cfg.Host = kv[1]
+		case "port":
+			cfg.Port = kv[1]
+		}
+	}
+
+	return cfg
 }
