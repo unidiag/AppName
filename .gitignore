@@ -1,0 +1,5 @@
+build/
+frontend/node_modules/
+tvaplay
+config.ini
+geoip.mmdb
